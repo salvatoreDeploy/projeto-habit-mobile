@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 import { ScrollView, Text, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { BackButton } from "../components/BackButton";
+import { ProgressBar } from "../components/ProgressBar";
+import { CheckBox } from "../components/CheckBox";
 
 interface Params {
   date: string;
@@ -29,6 +31,11 @@ export function Habit() {
         <Text className="mt-2 text-white font-extrabold text-3xl lowercase">
           {dayOfMonth}
         </Text>
+        <ProgressBar progress={30} />
+        <View className="mt-6">
+          <CheckBox title="Beber 2L de Agua" />
+          <CheckBox title="Codar Mobile" checked={true} />
+        </View>
       </ScrollView>
     </View>
   );
