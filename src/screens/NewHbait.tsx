@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -10,6 +11,7 @@ import { BackButton } from "../components/BackButton";
 import { CheckBox } from "../components/CheckBox";
 import { Feather } from "@expo/vector-icons";
 import colors from "tailwindcss/colors";
+import { api } from "../lib/api";
 
 const availableWeekDays = [
   "Domingo",
@@ -23,6 +25,7 @@ const availableWeekDays = [
 
 export function NewHabit() {
   const [weekDays, setWeekDays] = useState<number[]>([]);
+  const [title, setTitle] = useState("");
 
   function handleToggleWeekDay(weekDayIndex: number) {
     if (weekDays.includes(weekDayIndex)) {
@@ -31,6 +34,27 @@ export function NewHabit() {
       );
     } else {
       setWeekDays((prevState) => [...prevState, weekDayIndex]); // Marcar um Dia
+    }
+  }
+
+  async function handleCreateNewHabit() {
+    try {
+      if (!title.trim() || weekDays.length === 0) {
+        Alert.alert(
+          "Para cadastrar novo habito",
+          "Informe o nome do Habito e os dias de recorrencia"
+        );
+      }
+
+      await api.post("/habit", { title, weekDays });
+
+      setTitle("");
+      setWeekDays([]);
+
+      Alert.alert("Novo habito", "Habito criado com sucesso");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Ops", "Nao foi possivel cadastrar novo habito");
     }
   }
 
@@ -51,6 +75,8 @@ export function NewHabit() {
           className="h-12 pl-4 rounded-lg mt-3 bg-zinc-900 text-white border-2 border-zinc-800 focus:border-green-600"
           placeholder="Exercicios, dormir bem, etc.."
           placeholderTextColor={colors.zinc[400]}
+          onChangeText={setTitle}
+          value={title}
         />
         <Text className="mt-4 mb-3 text-white font-semibold text-base">
           Qual a recorrência?
@@ -66,6 +92,7 @@ export function NewHabit() {
         <TouchableOpacity
           activeOpacity={0.7}
           className="w-full h-14 flex-row items-center justify-center bg-green-600 rounded-md mt-6"
+          onPress={handleCreateNewHabit}
         >
           <Feather name="check" size={20} color={colors.white} />
           <Text className="font-semibold text-base text-white ml-2">

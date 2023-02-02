@@ -34,7 +34,7 @@ export function Habit() {
         <ProgressBar progress={30} />
         <View className="mt-6">
           <CheckBox title="Beber 2L de Agua" />
-          <CheckBox title="Codar Mobile" checked={true} />
+          <CheckBox title="Codar Mobile" checked={false} />
         </View>
       </ScrollView>
     </View>
